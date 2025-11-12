@@ -1,4 +1,3 @@
-// Stopwatch logic
 let startTime, elapsedTime = 0, timerInterval;
 let running = false;
 let lapCounter = 0;
@@ -29,9 +28,12 @@ function formatTime(ms) {
 
 function updateDisplay() {
   display.textContent = formatTime(elapsedTime);
+
+  // Circular progress per 60 seconds
   const totalSeconds = Math.floor(elapsedTime / 1000);
   const progress = (totalSeconds % 60) / 60;
-  progressCircle.style.strokeDashoffset = dashArray - dashArray * progress;
+  const dashOffset = dashArray - (dashArray * progress);
+  progressCircle.style.strokeDashoffset = dashOffset;
 }
 
 function startStop() {
@@ -73,55 +75,3 @@ function reset() {
 startStopBtn.addEventListener("click", startStop);
 lapBtn.addEventListener("click", recordLap);
 resetBtn.addEventListener("click", reset);
-
-// 🎇 Animated Particle Background
-const canvas = document.getElementById("particles");
-const ctx = canvas.getContext("2d");
-let w, h, particles = [];
-
-function resize() {
-  w = canvas.width = window.innerWidth;
-  h = canvas.height = window.innerHeight;
-}
-window.addEventListener("resize", resize);
-resize();
-
-class Particle {
-  constructor() {
-    this.x = Math.random() * w;
-    this.y = Math.random() * h;
-    this.size = Math.random() * 3 + 1;
-    this.speedX = Math.random() * 0.6 - 0.3;
-    this.speedY = Math.random() * 0.6 - 0.3;
-  }
-  update() {
-    this.x += this.speedX;
-    this.y += this.speedY;
-    if (this.x < 0 || this.x > w) this.speedX *= -1;
-    if (this.y < 0 || this.y > h) this.speedY *= -1;
-  }
-  draw() {
-    ctx.beginPath();
-    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-    ctx.fillStyle = "rgba(255, 255, 255, 0.6)";
-    ctx.fill();
-  }
-}
-
-function initParticles() {
-  for (let i = 0; i < 80; i++) {
-    particles.push(new Particle());
-  }
-}
-
-function animate() {
-  ctx.clearRect(0, 0, w, h);
-  particles.forEach(p => {
-    p.update();
-    p.draw();
-  });
-  requestAnimationFrame(animate);
-}
-
-initParticles();
-animate();
