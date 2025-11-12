@@ -1,30 +1,54 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SkillCraft Stopwatch</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Stopwatch</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+  <!-- Animated background layers (kept behind content) -->
+  <div class="background" aria-hidden="true">
+    <div class="gradient-layer"></div>
+    <div class="glow-ball"></div>
+    <div class="glow-ball delay"></div>
+    <canvas id="particles"></canvas>
+  </div>
+
+  <!-- App content -->
   <div class="container">
-    <h1>⏱️Stopwatch</h1>
+    <!-- Header - guaranteed visible and centered -->
+    <h1 class="app-title">⏱️Stopwatch</h1>
 
-    <div class="stopwatch">
-      <div id="display">00:00:00.000</div>
-      <div class="buttons">
-        <button id="startPause">Start</button>
-        <button id="lap">Lap</button>
-        <button id="reset">Reset</button>
+    <!-- Card -->
+    <div class="stopwatch-card">
+      <div class="circle" id="circle">
+        <svg viewBox="0 0 200 200" aria-hidden="true" focusable="false">
+          <defs>
+            <linearGradient id="progressGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stop-color="#ff005c" />
+              <stop offset="100%" stop-color="#ff5f6d" />
+            </linearGradient>
+          </defs>
+
+          <circle cx="100" cy="100" r="90" class="base-ring"></circle>
+          <circle id="progress" cx="100" cy="100" r="90" stroke="url(#progressGradient)"></circle>
+        </svg>
+
+        <div class="time-display" id="display">00:00:00:00</div>
       </div>
-    </div>
 
-    <div class="laps">
-      <h2>Lap Times</h2>
-      <ul id="lapsList"></ul>
+      <div class="buttons">
+        <button id="startStop" class="btn start">START</button>
+        <button id="lap" class="btn lap">LAP</button>
+        <button id="reset" class="btn reset">RESET</button>
+      </div>
+
+      <ul class="laps" id="lapsList" aria-live="polite"></ul>
     </div>
   </div>
 
-  <script src="script.js"></script>
+  <!-- script.js remains your stopwatch logic + particle script -->
+  <script src="script.js" defer></script>
 </body>
 </html>
