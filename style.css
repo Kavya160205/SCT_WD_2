@@ -1,129 +1,214 @@
 /* Reset */
-* { margin:0; padding:0; box-sizing:border-box; font-family:"Poppins", sans-serif; }
-
-/* Root theme colors */
-:root{
-  --bg-start:#0f0c29;
-  --bg-mid:#302b63;
-  --bg-end:#24243e;
-  --accent-a:#00c9ff;
-  --accent-b:#92fe9d;
-  --progress-fallback:#ff4b6b;
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
 }
 
-/* Page layout */
 body {
-  height:100vh;
-  overflow:hidden;
-  display:flex;
-  justify-content:center;
-  align-items:flex-start; /* allow top spacing */
-  background: radial-gradient(circle at 10% 10%, rgba(255,255,255,0.02), transparent 20%);
-  color:#fff;
-  padding-top:36px; /* safe top spacing for header on small screens */
+  height: 100vh;
+  overflow: hidden;
+  color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
 }
 
-/* Background (BEHIND everything) */
-.background{ position:absolute; inset:0; overflow:hidden; z-index:-30; }
-.gradient-layer{
-  position:absolute; inset:0;
-  background: linear-gradient(120deg, var(--bg-start), var(--bg-mid), var(--bg-end), var(--accent-a), var(--accent-b));
-  background-size:500% 500%;
-  animation: moveGradient 18s ease infinite;
-  z-index:-28;
+/* 🔵 Dynamic Gradient Background */
+.background {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(120deg, #0f2027, #203a43, #2c5364);
+  background-size: 400% 400%;
+  animation: gradientFlow 12s ease infinite;
+  overflow: hidden;
+  z-index: -2;
 }
-@keyframes moveGradient{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
 
-.glow-ball{
-  position:absolute; width:500px; height:500px; border-radius:50%;
-  background: radial-gradient(circle, rgba(0,255,255,0.18), transparent 70%);
-  top:-150px; left:-150px; filter:blur(60px); z-index:-27; animation:floatGlow 22s ease-in-out infinite;
+@keyframes gradientFlow {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }
-.glow-ball.delay{ background: radial-gradient(circle, rgba(255,0,128,0.15), transparent 70%); bottom:-200px; right:-200px; left:auto; animation-delay:10s; }
-@keyframes floatGlow{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(80px) scale(1.2)}}
 
-/* Particle canvas - behind content but above gradient */
-#particles{ position:absolute; inset:0; z-index:-25; display:block; }
+/* 🌌 Floating glowing circles */
+.circle-bg {
+  position: absolute;
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(0,255,255,0.15), transparent 70%);
+  border-radius: 50%;
+  animation: float 20s linear infinite;
+  top: -100px;
+  left: -100px;
+  z-index: -1;
+  filter: blur(40px);
+}
 
-/* Container that holds header + card */
-.container{
-  position:relative;
-  z-index:10;             
-  width:100%;
-  max-width:420px;
-  margin: 0 20px;
-  text-align:center;
-  padding-top:12px;       
-/* ---- HEADER ---- */
-.app-title{
-  display:inline-flex;           
-  align-items:center;
-  justify-content:center;
-  gap:10px;
-  font-weight:700;
-  font-size:2rem;
-  letter-spacing:1px;
-  margin:0 0 32px 0;            
-  padding:0;
-  position:relative;
-  z-index:20;                     
+.circle-bg.delay {
+  animation-delay: 10s;
+  background: radial-gradient(circle, rgba(255,0,128,0.12), transparent 70%);
+  right: -150px;
+  left: auto;
+}
+
+@keyframes float {
+  0% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(60px) rotate(180deg); }
+  100% { transform: translateY(0) rotate(360deg); }
+}
+
+/* Container */
+.container {
+  text-align: center;
+  position: relative;
+  z-index: 5;
+}
+
+h1 {
+  font-weight: 700;
+  font-size: 2rem;
+  letter-spacing: 1px;
   background: linear-gradient(90deg, #00f2fe, #4facfe);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  color: transparent;             /* linter-friendly fallback */
-  text-shadow: 0 0 10px rgba(0,242,254,0.18);
+  margin-bottom: 25px;
 }
 
-/* optional icon before the header (uncomment if you want) */
-/* .app-title::before{ content:"⏱️"; font-size:1.8rem; display:inline-block; filter:drop-shadow(0 0 8px rgba(0,242,254,0.6)); } */
-
-/* ---- CARD ---- */
-.stopwatch-card{
-  background: rgba(255,255,255,0.06);
-  -webkit-backdrop-filter: blur(12px);
-  backdrop-filter: blur(12px);
-  border-radius:20px;
-  padding:32px;
-  width:100%;
-  box-shadow:0 14px 50px rgba(2,6,23,0.55);
-  transition: transform .28s ease, box-shadow .28s ease;
-  margin:0 auto 12px;
-}
-.stopwatch-card:hover{ transform:translateY(-6px); box-shadow:0 26px 80px rgba(2,6,23,0.6); }
-
-/* ---- CIRCLE ---- */
-.circle{ position:relative; width:200px; height:200px; margin:0 auto 20px; }
-svg{ width:200px; height:200px; transform:rotate(-90deg); display:block; }
-svg circle{ fill:none; stroke-width:10; stroke-linecap:round; }
-.base-ring{ stroke: rgba(255,255,255,0.08); }
-#progress{ stroke: url(#progressGradient); stroke-dasharray:565; stroke-dashoffset:565; transition: stroke-dashoffset .08s linear; filter:drop-shadow(0 0 10px rgba(255,95,109,0.7)); }
-
-/* ---- TIME DISPLAY ---- */
-.time-display{
-  position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
-  font-size:1.8rem; font-weight:700; color:#fff; letter-spacing:1px;
-  text-shadow:0 0 12px rgba(255,255,255,0.45);
+/* Stopwatch Card */
+.stopwatch-card {
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(14px);
+  border-radius: 25px;
+  padding: 40px;
+  width: 340px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+  transition: transform 0.3s ease;
 }
 
-/* ---- BUTTONS ---- */
-.buttons{ display:flex; gap:10px; justify-content:center; margin-top:6px; }
-.btn{ flex:1; padding:10px 14px; border-radius:22px; border:0; cursor:pointer; font-weight:700; color:#fff; min-width:72px; transition:transform .18s ease, box-shadow .18s ease; }
-.btn.start{ background:linear-gradient(90deg,#00f2fe,#4facfe); box-shadow:0 10px 30px rgba(64,192,255,0.12);}
-.btn.lap{ background:linear-gradient(90deg,#a18cd1,#fbc2eb); box-shadow:0 10px 30px rgba(145,110,210,0.08);}
-.btn.reset{ background:linear-gradient(90deg,#ff6b6b,#ff4757); box-shadow:0 10px 30px rgba(255,80,100,0.12);}
-.btn:hover{ transform:translateY(-4px); box-shadow:0 18px 40px rgba(0,0,0,0.45); }
+.stopwatch-card:hover {
+  transform: scale(1.02);
+}
 
-/* ---- LAPS ---- */
-.laps{ list-style:none; max-height:140px; overflow:auto; margin-top:12px; padding:0; }
-.laps li{ background:rgba(255,255,255,0.04); border-radius:10px; padding:8px 12px; margin-bottom:8px; display:flex; justify-content:space-between; }
+/* Circle Timer */
+.circle {
+  position: relative;
+  width: 200px;
+  height: 200px;
+  margin: 0 auto 25px;
+}
+
+svg {
+  position: relative;
+  width: 200px;
+  height: 200px;
+  transform: rotate(-90deg);
+}
+
+svg circle {
+  fill: none;
+  stroke-width: 10;
+  stroke-linecap: round;
+}
+
+svg circle:first-child {
+  stroke: rgba(255, 255, 255, 0.1);
+}
+
+#progress {
+  stroke: linear-gradient(90deg, #ff005c, #ff5f6d);
+  stroke-dasharray: 565;
+  stroke-dashoffset: 565;
+  transition: stroke-dashoffset 0.1s linear;
+  filter: drop-shadow(0 0 10px #ff005c);
+}
+
+/* Timer text */
+.time-display {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: #fff;
+  text-shadow: 0 0 12px rgba(255, 255, 255, 0.5);
+}
+
+/* Buttons */
+.buttons {
+  display: flex;
+  justify-content: space-between;
+  margin: 20px 0;
+}
+
+.btn {
+  flex: 1;
+  margin: 0 6px;
+  padding: 10px 0;
+  border: none;
+  border-radius: 25px;
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(255, 95, 109, 0.4);
+}
+
+.btn.start {
+  background: linear-gradient(90deg, #00f2fe, #4facfe);
+}
+
+.btn.lap {
+  background: linear-gradient(90deg, #a18cd1, #fbc2eb);
+}
+
+.btn.reset {
+  background: linear-gradient(90deg, #ff6b6b, #ff4757);
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(255, 95, 109, 0.7);
+}
+
+/* Laps */
+.laps {
+  list-style: none;
+  max-height: 150px;
+  overflow-y: auto;
+  margin-top: 10px;
+  padding: 0;
+}
+
+.laps li {
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 8px 14px;
+  color: #fff;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  transition: all 0.3s ease;
+}
+
+.laps li:hover {
+  background: rgba(255, 255, 255, 0.18);
+  transform: scale(1.02);
+}
 
 /* Footer */
-footer{ margin-top:12px; opacity:0.88; font-size:0.9rem; color:rgba(255,255,255,0.85); }
+footer {
+  margin-top: 25px;
+  font-size: 0.85rem;
+  opacity: 0.85;
+  letter-spacing: 0.5px;
+}
 
-/* Responsive */
-@media (max-width:460px){
-  .container{ padding-top:8px; }
-  .app-title{ font-size:1.6rem; margin-bottom:18px; }
-  .circle{ width:170px; height:170px; } svg{ width:170px; height:170px; }
-  .stopwatch-card{ padding:20px; border-radius:16px; }
+footer span {
+  color: #00e6ff;
+  font-weight: 600;
 }
